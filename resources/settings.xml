@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<settings>
+	<category label="General">
+		<setting label="URL" type="text" id="url_address" default="http://thepiratebay.se"/>
+		<setting label="Extra information" type="lsep"/>
+		<setting label="extra search" type="text" id="extra" default=""/>
+		<setting label="Files to download" type="lsep"/>
+		<setting label="Max torrents" type="slider" id="max_magnets" default="10" range="1,1,100" option="int" />
+	</category>
+	<category label="Movies Quality">
+		<setting label="480p" type="bool" id="movie_q1" default="false"/>
+		<setting label="DVD" type="bool" id="movie_q2" default="false"/>
+		<setting label="HDTV" type="bool" id="movie_q3" default="true"/>
+		<setting label="720p" type="bool" id="movie_q4" default="true"/>
+		<setting label="1080p" type="bool" id="movie_q5" default="true"/>
+		<setting label="3D" type="bool" id="movie_q6" default="false"/>
+		<setting label="WEB" type="bool" id="movie_q7" default="true"/>
+		<setting label="Bluray" type="bool" id="movie_q8" default="true"/>
+		<setting label="BRRip" type="bool" id="movie_q9" default="true"/>
+		<setting label="HDRip" type="bool" id="movie_q10" default="true"/>		
+		<setting label="MicroHD" type="bool" id="movie_q11" default="true"/>
+		<setting label="x264" type="bool" id="movie_q12" default="true"/>
+		<setting label="AC3" type="bool" id="movie_q13" default="true"/>
+		<setting label="AAC" type="bool" id="movie_q14" default="true"/>
+		<setting label="HEVC" type="bool" id="movie_q15" default="true"/>
+		<setting label="CAM" type="bool" id="movie_q16" default="false"/>
+	</category>
+	<category label="TV Shows Quality">
+		<setting label="480p" type="bool" id="TV_q1" default="false"/>
+		<setting label="DVD" type="bool" id="TV_q2" default="false"/>
+		<setting label="HDTV" type="bool" id="TV_q3" default="true"/>
+		<setting label="720p" type="bool" id="TV_q4" default="true"/>
+		<setting label="1080p" type="bool" id="TV_q5" default="false"/>
+		<setting label="WEB" type="bool" id="TV_q7" default="true"/>
+		<setting label="Bluray" type="bool" id="TV_q8" default="true"/>
+		<setting label="BRRip" type="bool" id="TV_q9" default="true"/>
+		<setting label="HDRip" type="bool" id="TV_q10" default="true"/>		
+		<setting label="x264" type="bool" id="TV_q12" default="true"/>
+		<setting label="HEVC" type="bool" id="TV_q15" default="true"/>
+	</category>
+</settings>
