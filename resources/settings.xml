@@ -1,14 +1,17 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <settings>
 	<category label="General">
-		<setting label="URL" type="text" id="url_address" default="http://thepiratebay.se"/>
+		<setting label="URL address (http://example.com):" type="text" id="url_address" default="http://thepiratebay.se"/>
+		<!--<setting label="Language for the Search" type="lsep"/>
+		<setting label="Language:" type="labelenum" id="language" values="en|de|es|fr|it|pt" default="en"/>-->
 		<setting label="Extra Information for the Search" type="lsep"/>
-		<setting label="Extra Search" type="text" id="extra" default=""/>
-		<setting label="Keyword Filtering" type="lsep"/>
-		<setting label="Allowed (separated by spaces only)" type="text" id="key_allowed" default=""/>
-		<setting label="Denied (separated by spaces only)" type="text" id="key_denied" default=""/>
-		<setting label="Files to Download" type="lsep"/>
-		<setting label="Maximum Torrents" type="slider" id="max_magnets" default="10" range="1,1,100" option="int" />
+		<setting label="Extra words for the query:" type="text" id="extra" default=""/>
+		<setting label="Keyword Filtering Movies" type="lsep"/>
+		<setting label="Allowed (separated by spaces only):" type="text" id="movie_key_allowed" default=""/>
+		<setting label="Denied (separated by spaces only):" type="text" id="movie_key_denied" default=""/>
+		<setting label="Keyword Filtering TV" type="lsep"/>
+		<setting label="Allowed (separated by spaces only):" type="text" id="TV_key_allowed" default=""/>
+		<setting label="Denied (separated by spaces only):" type="text" id="TV_key_denied" default=""/>
 	</category>
 	<category label="Movies Quality">
 		<setting label="480p" type="bool" id="movie_q1" default="false"/>
@@ -27,6 +30,7 @@
 		<setting label="AAC" type="bool" id="movie_q14" default="true"/>
 		<setting label="HEVC" type="bool" id="movie_q15" default="true"/>
 		<setting label="CAM" type="bool" id="movie_q16" default="false"/>
+		<setting label="TeleSync" type="bool" id="movie_q17" default="false"/>
 	</category>
 	<category label="TV Shows Quality">
 		<setting label="480p" type="bool" id="TV_q1" default="false"/>
@@ -40,5 +44,14 @@
 		<setting label="HDRip" type="bool" id="TV_q10" default="true"/>		
 		<setting label="x264" type="bool" id="TV_q12" default="true"/>
 		<setting label="HEVC" type="bool" id="TV_q15" default="true"/>
+	</category>
+	<category label="Files to Download">
+		<setting label="Maximum Torrents to Send to Pulsar:" type="slider" id="max_magnets" default="10" range="0,1,20" option="int" />
+		<setting label="Limitation Size Movie Files" type="lsep"/>
+		<setting label="Minimum Size in GB (0 = Not Limit):" type="slider" id="movie_min_size" default="0" range="0,0.25,10" option="float" />
+		<setting label="Maximum Size in GB (10 = Not Limit):" type="slider" id="movie_max_size" default="10" range="0,0.25,10" option="float" />
+		<setting label="Limitation Size TV Files" type="lsep"/>
+		<setting label="Minimum Size in GB (0 = Not Limit):" type="slider" id="TV_min_size" default="0" range="0,0.25,10" option="float" />
+		<setting label="Maximum Size in GB (10 = Not Limit):" type="slider" id="TV_max_size" default="10" range="0,0.25,10" option="float" />
 	</category>
 </settings>

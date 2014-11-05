@@ -6,14 +6,23 @@ import re
 url = provider.ADDON.getSetting('url_address')
 icon = provider.ADDON.getAddonInfo('icon')
 name_provider = provider.ADDON.getAddonInfo('name') # gets name
+language = provider.ADDON.getSetting('language')
 extra = provider.ADDON.getSetting('extra')
-key_allowed = provider.ADDON.getSetting('key_allowed')
-key_denied = provider.ADDON.getSetting('key_denied')
+movie_key_allowed = provider.ADDON.getSetting('movie_key_allowed')
+movie_key_denied = provider.ADDON.getSetting('movie_key_denied')
+TV_key_allowed = provider.ADDON.getSetting('TV_key_allowed')
+TV_key_denied = provider.ADDON.getSetting('TV_key_denied')
+movie_min_size = float(provider.ADDON.getSetting('movie_min_size'))
+movie_max_size = float(provider.ADDON.getSetting('movie_max_size'))
+TV_min_size = float(provider.ADDON.getSetting('TV_min_size'))
+TV_max_size = float(provider.ADDON.getSetting('TV_max_size'))
 max_magnets = int(provider.ADDON.getSetting('max_magnets'))  #max_magnets
 
 #define quality variables
-quality_allow = ['480p', 'DVD', 'HDTV', '720p','1080p', '3D' , 'WEB', 'Bluray', 'BRRip', 'HDRip', 'MicroHD', 'x264', 'AC3', 'AAC', 'HEVC', 'CAM'] + re.split('\s',key_allowed)
-quality_deny = re.split('\s',key_denied)
+quality_allow = ['480p', 'DVD', 'HDTV', '720p','1080p', '3D' , 'WEB', 'Bluray', 'BRRip', 'HDRip', 'MicroHD', 'x264', 'AC3', 'AAC', 'HEVC', 'CAM'] 
+quality_deny = []
+max_size = 10.00 #10 it is not limit
+min_size = 0.00
 
 #quality_movie
 movie_q1 = provider.ADDON.getSetting('movie_q1') #480p
@@ -32,8 +41,9 @@ movie_q13 = provider.ADDON.getSetting('movie_q13') #AC3
 movie_q14 = provider.ADDON.getSetting('movie_q14') #AAC
 movie_q15 = provider.ADDON.getSetting('movie_q15') #HEVC
 movie_q16 = provider.ADDON.getSetting('movie_q16') #CAM
-movie_allow = re.split('\s',key_allowed)
-movie_deny = re.split('\s',key_denied) 
+movie_q17 = provider.ADDON.getSetting('movie_q17') #TeleSync
+movie_allow = re.split('\s',movie_key_allowed)
+movie_deny = re.split('\s',movie_key_denied)
 movie_allow.append('480p') if movie_q1 == 'true' else movie_deny.append('480p')
 movie_allow.append('DVD') if movie_q2 == 'true' else movie_deny.append('DVD')
 movie_allow.append('HDTV') if movie_q3 == 'true' else movie_deny.append('HDTV')
@@ -53,6 +63,7 @@ movie_allow.append('AC3') if movie_q13 == 'true' else movie_deny.append('AC3')
 movie_allow.append('AAC') if movie_q14 == 'true' else movie_deny.append('AAC')
 movie_allow.append('HEVC') if movie_q15 == 'true' else movie_deny.append('HEVC')
 movie_allow.append('CAM') if movie_q16 == 'true' else movie_deny.append('CAM')
+movie_allow.append('TeleSync') if movie_q17 == 'true' else movie_deny.extend(['TeleSync', ' TS '])
 
 #quality_TV
 TV_q1 = provider.ADDON.getSetting('TV_q1') #480p
@@ -66,8 +77,8 @@ TV_q9 = provider.ADDON.getSetting('TV_q9') #BRRip
 TV_q10 = provider.ADDON.getSetting('TV_q10') #HDRip
 TV_q12 = provider.ADDON.getSetting('TV_q12') #x264
 TV_q15 = provider.ADDON.getSetting('TV_q15') #HEVC
-TV_allow = re.split('\s',key_allowed)
-TV_deny = re.split('\s',key_denied) 
+TV_allow = re.split('\s',TV_key_allowed)
+TV_deny = re.split('\s',TV_key_denied) 
 TV_allow.append('480p') if TV_q1 == 'true' else TV_deny.append('480p')
 TV_allow.append('DVD') if TV_q2 == 'true' else TV_deny.append('DVD')
 TV_allow.append('HDTV') if TV_q3 == 'true' else TV_deny.append('HDTV')
@@ -80,13 +91,25 @@ TV_allow.append('HDRip') if TV_q10 == 'true' else TV_deny.append('HDRip')
 TV_allow.append('x264') if TV_q12 == 'true' else TV_deny.append('x264')
 TV_allow.append('HEVC') if TV_q15 == 'true' else TV_deny.append('HEVC')
 
-# function to validate
+# validate keywords
 def included(value, keys):
+	value = value.replace('-',' ')
 	res = False
 	for item in keys:
-		if item.upper() in value.upper():
+		if item.upper() in value.upper() and item != '':
 			res = True 
 			break
+	return res
+
+# validate size
+def size_clearance(size):
+	global max_size
+	max_size = 100 if max_size == 10 else max_size
+	res = False
+	value = float(re.split('\s', size.replace(',',''))[0])
+	value *= 0.001 if 'M' in size else 1
+	if min_size <= value and value <= max_size:
+		res = True
 	return res
 
 # clean_html
@@ -105,15 +128,16 @@ def extract_magnets(data):
 		for cm, magnet in enumerate(re.findall(r'magnet:\?[^\'"\s<>\[\]]+', data)):
 			name = re.search('dn=(.*?)&tr=',magnet).group(1) #find name in the magnet
 			name = unquote_plus(name).replace('.',' ') + ' - ' + size[cm].replace('&nbsp;',' ') + 'B' + ' - ' + name_provider
-			if included(name, quality_allow) and not included(name, quality_deny):
+			if included(name, quality_allow) and not included(name, quality_deny) and size_clearance(size[cm].replace('&nbsp;',' ')):
 					yield {"name": name, "uri": magnet} #return le torrent
 					cont+= 1
+			else:
+				provider.log.info(name + '   ***Not Included for keyword filtering or size***')
 			if cont == max_magnets: #limit magnets
 				break
 		provider.log.info('>>>>>>' + str(cont) + ' torrents sent to Pulsar<<<<<<<')
 	except:
 		provider.log.info('>>>>>>>ERROR parsing data<<<<<<<')
-
 
 def search(info):
 	query = info['query'] + extra
@@ -122,16 +146,20 @@ def search(info):
 	return extract_magnets(response.data)
 
 def search_movie(info):
-	global quality_allow, quality_deny
+	global quality_allow, quality_deny, min_size, max_size
 	quality_allow = movie_allow
 	quality_deny = movie_deny
+	min_size = movie_min_size
+	max_size = movie_max_size
 	query = '"' + info['title'] + '" ' + str(info['year']) #define query
 	return search({'query': query})
 
 def search_episode(info):
-	global quality_allow, quality_deny
+	global quality_allow, quality_deny, min_size, max_size
 	quality_allow = TV_allow
 	quality_deny = TV_deny
+	min_size = TV_min_size
+	max_size = TV_max_size
 	query = '"' + info['title'] + '" S%02dE%02d '% (info['season'],info['episode'])  #define query
 	return search({'query': query})
 
