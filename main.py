@@ -1,16 +1,19 @@
 from pulsar import provider
 from urllib import unquote_plus
+import re
 
 # this read the settings
 url = provider.ADDON.getSetting('url_address')
 icon = provider.ADDON.getAddonInfo('icon')
 name_provider = provider.ADDON.getAddonInfo('name') # gets name
 extra = provider.ADDON.getSetting('extra')
+key_allowed = provider.ADDON.getSetting('key_allowed')
+key_denied = provider.ADDON.getSetting('key_denied')
 max_magnets = int(provider.ADDON.getSetting('max_magnets'))  #max_magnets
 
 #define quality variables
-quality_allow = ['480p', 'DVD', 'HDTV', '720p','1080p', '3D' , 'WEB', 'Bluray', 'BRRip', 'HDRip', 'MicroHD', 'x264', 'AC3', 'AAC', 'HEVC', 'CAM']
-quality_deny = []
+quality_allow = ['480p', 'DVD', 'HDTV', '720p','1080p', '3D' , 'WEB', 'Bluray', 'BRRip', 'HDRip', 'MicroHD', 'x264', 'AC3', 'AAC', 'HEVC', 'CAM'] + re.split('\s',key_allowed)
+quality_deny = re.split('\s',key_denied)
 
 #quality_movie
 movie_q1 = provider.ADDON.getSetting('movie_q1') #480p
@@ -29,8 +32,8 @@ movie_q13 = provider.ADDON.getSetting('movie_q13') #AC3
 movie_q14 = provider.ADDON.getSetting('movie_q14') #AAC
 movie_q15 = provider.ADDON.getSetting('movie_q15') #HEVC
 movie_q16 = provider.ADDON.getSetting('movie_q16') #CAM
-movie_allow = []
-movie_deny = [] 
+movie_allow = re.split('\s',key_allowed)
+movie_deny = re.split('\s',key_denied) 
 movie_allow.append('480p') if movie_q1 == 'true' else movie_deny.append('480p')
 movie_allow.append('DVD') if movie_q2 == 'true' else movie_deny.append('DVD')
 movie_allow.append('HDTV') if movie_q3 == 'true' else movie_deny.append('HDTV')
@@ -63,8 +66,8 @@ TV_q9 = provider.ADDON.getSetting('TV_q9') #BRRip
 TV_q10 = provider.ADDON.getSetting('TV_q10') #HDRip
 TV_q12 = provider.ADDON.getSetting('TV_q12') #x264
 TV_q15 = provider.ADDON.getSetting('TV_q15') #HEVC
-TV_allow = []
-TV_deny = [] 
+TV_allow = re.split('\s',key_allowed)
+TV_deny = re.split('\s',key_denied) 
 TV_allow.append('480p') if TV_q1 == 'true' else TV_deny.append('480p')
 TV_allow.append('DVD') if TV_q2 == 'true' else TV_deny.append('DVD')
 TV_allow.append('HDTV') if TV_q3 == 'true' else TV_deny.append('HDTV')
@@ -79,16 +82,15 @@ TV_allow.append('HEVC') if TV_q15 == 'true' else TV_deny.append('HEVC')
 
 # function to validate
 def included(value, keys):
-    res = False
-    for item in keys:
-        if item in value:
-            res = True 
-            break
-    return res
+	res = False
+	for item in keys:
+		if item.upper() in value.upper():
+			res = True 
+			break
+	return res
 
 # clean_html
 def clean_html(data):
-	import re
 	lines = re.findall('<!--(.*?)-->',data)
 	for line in lines:
 		data = data.replace(line,'')
@@ -96,7 +98,6 @@ def clean_html(data):
 
 # using function from Steeve to add Provider's name
 def extract_magnets(data):
-	import re
 	try:
 		data = clean_html(data)
 		size = re.findall(', Size (.*?)B,', data) # list the size

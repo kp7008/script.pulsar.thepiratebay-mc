@@ -2,10 +2,13 @@
 <settings>
 	<category label="General">
 		<setting label="URL" type="text" id="url_address" default="http://thepiratebay.se"/>
-		<setting label="Extra information" type="lsep"/>
-		<setting label="extra search" type="text" id="extra" default=""/>
-		<setting label="Files to download" type="lsep"/>
-		<setting label="Max torrents" type="slider" id="max_magnets" default="10" range="1,1,100" option="int" />
+		<setting label="Extra Information for the Search" type="lsep"/>
+		<setting label="Extra Search" type="text" id="extra" default=""/>
+		<setting label="Keyword Filtering" type="lsep"/>
+		<setting label="Allowed (separated by spaces only)" type="text" id="key_allowed" default=""/>
+		<setting label="Denied (separated by spaces only)" type="text" id="key_denied" default=""/>
+		<setting label="Files to Download" type="lsep"/>
+		<setting label="Maximum Torrents" type="slider" id="max_magnets" default="10" range="1,1,100" option="int" />
 	</category>
 	<category label="Movies Quality">
 		<setting label="480p" type="bool" id="movie_q1" default="false"/>
