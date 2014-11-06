@@ -132,12 +132,12 @@ def extract_magnets(data):
 					yield {"name": name, "uri": magnet} #return le torrent
 					cont+= 1
 			else:
-				provider.log.info(name + '   ***Not Included for keyword filtering or size***')
+				provider.log.warning(name + '   ***Not Included for keyword filtering or size***')
 			if cont == max_magnets: #limit magnets
 				break
 		provider.log.info('>>>>>>' + str(cont) + ' torrents sent to Pulsar<<<<<<<')
 	except:
-		provider.log.info('>>>>>>>ERROR parsing data<<<<<<<')
+		provider.log.error('>>>>>>>ERROR parsing data<<<<<<<')
 
 def search(info):
 	query = info['query'] + extra
