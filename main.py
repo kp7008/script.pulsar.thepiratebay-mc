@@ -64,6 +64,8 @@ movie_allow.append('AAC') if movie_q14 == 'true' else movie_deny.append('AAC')
 movie_allow.append('HEVC') if movie_q15 == 'true' else movie_deny.append('HEVC')
 movie_allow.append('CAM') if movie_q16 == 'true' else movie_deny.append('CAM')
 movie_allow.append('TeleSync') if movie_q17 == 'true' else movie_deny.extend(['TeleSync', ' TS '])
+if '' in movie_allow: movie_allow.remove('')
+if '' in movie_deny: movie_deny.remove('') 
 
 #quality_TV
 TV_q1 = provider.ADDON.getSetting('TV_q1') #480p
@@ -90,13 +92,15 @@ TV_allow.append('BRRip') if TV_q9 == 'true' else TV_deny.append('BRRip')
 TV_allow.append('HDRip') if TV_q10 == 'true' else TV_deny.append('HDRip')
 TV_allow.append('x264') if TV_q12 == 'true' else TV_deny.append('x264')
 TV_allow.append('HEVC') if TV_q15 == 'true' else TV_deny.append('HEVC')
+if '' in TV_allow: TV_allow.remove('')
+if '' in TV_deny: TV_deny.remove('') 
 
 # validate keywords
 def included(value, keys):
 	value = value.replace('-',' ')
 	res = False
 	for item in keys:
-		if item.upper() in value.upper() and item != '':
+		if item.upper() in value.upper():
 			res = True 
 			break
 	return res
@@ -124,6 +128,10 @@ def extract_magnets(data):
 	try:
 		data = clean_html(data)
 		size = re.findall(', Size (.*?)B,', data) # list the size
+		provider.log.info('Keywords allowed: ' + str(quality_allow))
+		provider.log.info('Keywords denied: ' + str(quality_deny))
+		provider.log.info('min Size: ' + str(min_size) + ' GB')
+		provider.log.info('max Size: ' + str(max_size)  + ' GB' if max_size != 10 else 'max Size: MAX')
 		cont = 0
 		for cm, magnet in enumerate(re.findall(r'magnet:\?[^\'"\s<>\[\]]+', data)):
 			name = re.search('dn=(.*?)&tr=',magnet).group(1) #find name in the magnet
@@ -142,8 +150,13 @@ def extract_magnets(data):
 def search(info):
 	query = info['query'] + extra
 	provider.notify(message = 'Searching: ' + query.upper() + '...', header = None, time = 1500, image = icon)
+	provider.log.info("%s/search/%s/0/7/200" % (url,query.replace(' ','%20')))
 	response = provider.GET("%s/search/%s/0/7/200" % (url,query.replace(' ','%20')))
-	return extract_magnets(response.data)
+	if response == (None, None):
+		provider.log.error('404 Page not found')
+		return []
+	else:
+		return extract_magnets(response.data)
 
 def search_movie(info):
 	global quality_allow, quality_deny, min_size, max_size
