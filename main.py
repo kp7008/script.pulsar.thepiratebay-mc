@@ -149,7 +149,7 @@ def extract_magnets(data):
 
 def search(info):
 	query = info['query'] + extra
-	provider.notify(message = 'Searching: ' + query.upper() + '...', header = None, time = 1500, image = icon)
+	provider.notify(message = 'Searching: ' + query.title() + '...', header = None, time = 1500, image = icon)
 	provider.log.info("%s/search/%s/0/7/200" % (url,query.replace(' ','%20')))
 	response = provider.GET("%s/search/%s/0/7/200" % (url,query.replace(' ','%20')))
 	if response == (None, None):
