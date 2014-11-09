@@ -173,7 +173,7 @@ def search_episode(info):
 	quality_deny = TV_deny
 	min_size = TV_min_size
 	max_size = TV_max_size
-	query = '"' + info['title'] + '" S%02dE%02d '% (info['season'],info['episode'])  #define query
+	query = '"' + info['title'].replace(' s ','s ') + '" S%02dE%02d '% (info['season'],info['episode'])  #define query
 	return search({'query': query})
 
 # This registers your module for use
