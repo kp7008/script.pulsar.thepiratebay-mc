@@ -42,6 +42,7 @@ movie_q14 = provider.ADDON.getSetting('movie_q14') #AAC
 movie_q15 = provider.ADDON.getSetting('movie_q15') #HEVC
 movie_q16 = provider.ADDON.getSetting('movie_q16') #CAM
 movie_q17 = provider.ADDON.getSetting('movie_q17') #TeleSync
+movie_q18 = provider.ADDON.getSetting('movie_q18') #DTS
 movie_allow = re.split('\s',movie_key_allowed)
 movie_deny = re.split('\s',movie_key_denied)
 movie_allow.append('480p') if movie_q1 == 'true' else movie_deny.append('480p')
@@ -64,6 +65,7 @@ movie_allow.append('AAC') if movie_q14 == 'true' else movie_deny.append('AAC')
 movie_allow.append('HEVC') if movie_q15 == 'true' else movie_deny.append('HEVC')
 movie_allow.append('CAM') if movie_q16 == 'true' else movie_deny.append('CAM')
 movie_allow.append('TeleSync') if movie_q17 == 'true' else movie_deny.extend(['TeleSync', ' TS '])
+movie_allow.append('DTS') if movie_q18 == 'true' else movie_deny.append('DTS')
 if '' in movie_allow: movie_allow.remove('')
 if '' in movie_deny: movie_deny.remove('') 
 

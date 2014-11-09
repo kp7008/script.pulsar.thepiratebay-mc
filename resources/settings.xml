@@ -31,6 +31,7 @@
 		<setting label="HEVC" type="bool" id="movie_q15" default="true"/>
 		<setting label="CAM" type="bool" id="movie_q16" default="false"/>
 		<setting label="TeleSync" type="bool" id="movie_q17" default="false"/>
+		<setting label="DTS" type="bool" id="movie_q18" default="false"/>
 	</category>
 	<category label="TV Shows Quality">
 		<setting label="480p" type="bool" id="TV_q1" default="false"/>
