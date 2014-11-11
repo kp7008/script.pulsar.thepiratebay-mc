@@ -152,8 +152,9 @@ def extract_magnets(data):
 def search(info):
 	query = info['query'] + extra
 	provider.notify(message = 'Searching: ' + query.title() + '...', header = None, time = 1500, image = icon)
-	provider.log.info("%s/search/%s/0/7/200" % (url,query.replace(' ','%20')))
-	response = provider.GET("%s/search/%s/0/7/200" % (url,query.replace(' ','%20')))
+	url_search = "%s/search/%s/0/7/200" % (url,query.replace(' ','%20'))
+	provider.log.info(url_search)
+	response = provider.GET(url_search)
 	if response == (None, None):
 		provider.log.error('404 Page not found')
 		return []
