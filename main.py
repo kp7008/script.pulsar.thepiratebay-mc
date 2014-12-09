@@ -11,6 +11,7 @@ browser = common.Browser()
 # create the filters
 filters = common.Filtering()
 
+
 # using function from Steeve to add Provider's name and search torrent
 def extract_magnets(data):
     try:
@@ -20,10 +21,10 @@ def extract_magnets(data):
         cont = 0
         for cm, magnet in enumerate(re.findall(r'magnet:\?[^\'"\s<>\[\]]+', data)):
             name = re.search('dn=(.*?)&tr=',magnet).group(1) #find name in the magnet
-            name = unquote_plus(name).replace('.',' ') + ' - ' + size[cm].replace('&nbsp;',' ') + 'B' + ' - ' + settings.name_provider
+            name = unquote_plus(name).replace('.', ' ') + ' - ' + size[cm].replace('&nbsp;', ' ') + 'B' + ' - ' + settings.name_provider
             if filters.verify(name, size[cm].replace('&nbsp;',' ')):
                     yield {"name": name, "uri": magnet}  # return le torrent
-                    cont+= 1
+                    cont += 1
             else:
                 provider.log.warning(filters.reason)
             if cont == settings.max_magnets:  # limit magnets
@@ -32,13 +33,14 @@ def extract_magnets(data):
     except:
         provider.log.error('>>>>>>>ERROR parsing data<<<<<<<')
 
+
 def search(query):
     global filters
     filters.title = query  # to do filtering by name
     query += ' ' + settings.extra
     if settings.time_noti > 0: provider.notify(message="Searching: " + query.title() + '...', header=None, time=settings.time_noti, image=settings.icon)
     query = provider.quote_plus(query)
-    url_search = "%s/search/%s/0/7/200" % (settings.url,query.replace(' ', '%20'))  # change in each provider
+    url_search = "%s/search/%s/0/7/200" % (settings.url, query.replace(' ', '%20'))  # change in each provider
     provider.log.info(url_search)
     if browser.open(url_search):
         results = extract_magnets(browser.content)
@@ -47,14 +49,16 @@ def search(query):
         results = []
     return results
 
+
 def search_movie(info):
     filters.use_movie()
     query = (common.clean(info['title']) + ' ' + str(info['year'])) if settings.language == 'en' else common.translator(info['imdb_id'],settings.language)
     return search(query)
 
+
 def search_episode(info):
     filters.use_TV()
-    query =  common.clean(info['title']) + ' s%02de%02d'% (info['season'],info['episode'])  # define query
+    query = common.clean(info['title']) + ' s%02de%02d' % (info['season'], info['episode'])  # define query
     return search(query)
 
 # This registers your module for use
