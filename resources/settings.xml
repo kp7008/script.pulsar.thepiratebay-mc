@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <settings>
 	<category label="General">
-		<setting label="URL address (http://example.com):" type="text" id="url_address" default="http://thepiratebay.se"/>
+		<setting label="URL address (http://example.com):" type="text" id="url_address" default="https://thepiratebay.se"/>
 		<setting label="Language for the Search" type="lsep"/>
 		<setting label="Language:" type="labelenum" id="language" values="en|de|es|fr|it|pt" default="en"/>
 		<setting label="Extra Keywords to send in the URL" type="lsep"/>
@@ -35,10 +35,23 @@
 	<category label="Download Settings">
 		<setting label="Maximum Torrents to Send to Pulsar:" type="slider" id="max_magnets" default="10" range="0,1,20" option="int" />
 		<setting label="Limitation Size Movie Files" type="lsep"/>
-		<setting label="Minimum Size in GB (0 = Block Filet Limit):" type="slider" id="movie_min_size" default="0" range="0,0.25,10" option="float" />
-		<setting label="Maximum Size in GB (10 = Block Filet Limit):" type="slider" id="movie_max_size" default="10" range="0,0.25,10" option="float" />
+		<setting label="Minimum Size in GB (0 = Filter OFF):" type="slider" id="movie_min_size" default="0" range="0,0.25,10" option="float" />
+		<setting label="Maximum Size in GB (10 = Filter OFF):" type="slider" id="movie_max_size" default="10" range="0,0.25,10" option="float" />
 		<setting label="Limitation Size TV Files" type="lsep"/>
-		<setting label="Minimum Size in GB (0 = Block Filet Limit):" type="slider" id="TV_min_size" default="0" range="0,0.25,10" option="float" />
-		<setting label="Maximum Size in GB (10 = Block Filet Limit):" type="slider" id="TV_max_size" default="10" range="0,0.25,10" option="float" />
+		<setting label="Minimum Size in GB (0 = Filter OFF):" type="slider" id="TV_min_size" default="0" range="0,0.25,10" option="float" />
+		<setting label="Maximum Size in GB (10 = Filter OFF):" type="slider" id="TV_max_size" default="10" range="0,0.25,10" option="float" />
+	</category>
+    <category label="Trackers">
+        <setting label="from http://trackon.moviesndroids.com" type="lsep"/>
+		<setting label="Tracker0:" type="text" id="trackers0" default="http://t2.pow7.com/announce" />
+		<setting label="Tracker1:" type="text" id="trackers1" default="http://announce.torrentsmd.com:8080/announce" />
+		<setting label="Tracker2:" type="text" id="trackers2" default="http://academic-p2p.carlosdelfino.eti.br/announce" />
+		<setting label="Tracker3:" type="text" id="trackers3" default="http://atrack.pow7.com/announce" />
+		<setting label="Tracker4:" type="text" id="trackers4" default="http://tracker.veryamt.com/announce" />
+		<setting label="Tracker5:" type="text" id="trackers5" default="http://torrent.gresille.org/announce" />
+		<setting label="Tracker6:" type="text" id="trackers6" default="http://sadnem.appspot.com/announce" />
+		<setting label="Tracker7:" type="text" id="trackers7" default="http://bt.eutorrents.com/announce.php" />
+		<setting label="Tracker8:" type="text" id="trackers8" default="http://tracker.kuaikuai.cn:8080/announce" />
+		<setting label="Tracker9:" type="text" id="trackers9" default="http://rsltrackeri.appspot.com/announce" />
 	</category>
 </settings>

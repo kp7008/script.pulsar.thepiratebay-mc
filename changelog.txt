@@ -1,3 +1,12 @@
+Version 2.1.10
+FixBug
+
+Version 2.1.9
+New page sort
+
+Version 2.1.8
+New proxy
+
 Version 2.1.7
 
 Version 2.1.5
