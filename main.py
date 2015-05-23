@@ -18,17 +18,19 @@ def extract_torrents(data):
         filters.information()  # print filters settings
         data = common.clean_html(data)
         size = re.findall('Size (.*?)B', data) # list the size
-        #seedsPeers = re.findall('<td align="right">(.*?)</td>', data)  # list the size
-        #seeds = seedsPeers[0:][::2]
-        #peers = seedsPeers[1:][::2]
+        seedsPeers = re.findall('<td align="right">(.*?)</td>', data)  # list the size
+        seeds = seedsPeers[0:][::2]
+        peers = seedsPeers[1:][::2]
         cont = 0
         results = []
         for cm, magnet in enumerate(re.findall(r'magnet:\?[^\'"\s<>\[\]]+', data)):
-            name = re.search('dn=(.*?)&',magnet).group(1) #find name in the magnet
-            infohash = re.search(':btih:(.*?)&', magnet).group(1)  # find name in the magnet
-            name = size[cm].replace('&nbsp;',' ') + 'B' + ' - ' + unquote_plus(name).replace('.', ' ').title() + ' - ' + settings.name_provider
-            if filters.verify(name, size[cm].replace('&nbsp;',' ')):
-                    results.append( {"name": name, "uri": magnet, "info_hash": infohash} ) # return le torrent
+            info = common.Magnet(magnet)
+            name = size[cm].replace('&nbsp;',' ') + 'B' + ' - ' + info.name + ' - ' + settings.name_provider
+            if filters.verify(name, size[cm].replace('&nbsp;', ' ')):
+                    results.append({"name": name, "uri": magnet, "info_hash": info.hash,
+                                     "size": common.size_int(size[cm].replace('&nbsp;', ' ')),
+                                     "seeds": int(seeds[cm]), "peers": int(peers[cm]),
+                                     "language": settings.language})  # return le torrent
                     cont += 1
             else:
                 provider.log.warning(filters.reason)
@@ -49,9 +51,14 @@ def search(query):
     if browser.open(url_search):
         results = extract_torrents(browser.content)
     else:
-        provider.log.error('>>>>>>>%s<<<<<<<' % browser.status)
-        provider.notify(message=browser.status, header=None, time=5000, image=settings.icon)
-        results = []
+        url_search = "%s/search.php?q=%s&page=0&orderby=99" % (settings.url, query)  # change in each provider
+        provider.log.info(url_search)
+        if browser.open(url_search):
+            results = extract_torrents(browser.content)
+        else:
+            provider.log.error('>>>>>>>%s<<<<<<<' % browser.status)
+            provider.notify(message=browser.status, header=None, time=5000, image=settings.icon)
+            results = []
     return results
 
 

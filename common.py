@@ -312,13 +312,6 @@ def translator(imdb_id, language):
     return title.rstrip()
 
 
-def exception(title):
-    title = title.lower()
-    if title == 'csi crime scene investigation':
-        title = 'CSI'
-    return title
-
-
 def size_int(size_txt):
     size_txt = size_txt.upper()
     size1 = size_txt.replace('B','').replace('I', '').replace('K','').replace('M','').replace('G','')
@@ -358,3 +351,12 @@ def IMDB_title(IMDB_id):
         data = browser.content.replace('"', '').replace('{', '').replace('}', '').split(',')
         result = data[0].split(":")[1] + ' ' + data[1].split(":")[1]
     return result
+    
+    
+def exception(title):
+    title = title.lower()
+    title = title.replace('csi crime scene investigation', 'CSI')
+    title = title.replace('law and order special victims unit', 'law and order svu')
+    title = title.replace('law order special victims unit', 'law and order svu')
+    return title
+    
