@@ -45,20 +45,15 @@ def extract_torrents(data):
 
 def search(query):
     query += ' ' + settings.extra  # add the extra information
-    query = filters.type_filtering(query, '%20')  # check type filter and set-up filters.title
+    query = filters.type_filtering(query, '+')  # check type filter and set-up filters.title
     url_search = "%s/search/%s/0/99/200" % (settings.url, query)  # change in each provider
     provider.log.info(url_search)
-    if browser.open(url_search):
+    if browser.open2(url_search):
         results = extract_torrents(browser.content)
     else:
-        url_search = "%s/search.php?q=%s&page=0&orderby=99" % (settings.url, query)  # change in each provider
-        provider.log.info(url_search)
-        if browser.open(url_search):
-            results = extract_torrents(browser.content)
-        else:
-            provider.log.error('>>>>>>>%s<<<<<<<' % browser.status)
-            provider.notify(message=browser.status, header=None, time=5000, image=settings.icon)
-            results = []
+        provider.log.error('>>>>>>>%s<<<<<<<' % browser.status)
+        provider.notify(message=browser.status, header=None, time=5000, image=settings.icon)
+        results = []
     return results
 
 

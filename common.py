@@ -20,17 +20,6 @@ class Settings:
         self.IMDB_search = self.settings.getSetting('IMDB_search')
         max_magnets = self.settings.getSetting('max_magnets')
         self.max_magnets = int(max_magnets) if max_magnets is not '' else 10  # max_magnets
-        self.trackers = []
-        self.trackers.append(self.settings.getSetting('trackers0'))
-        self.trackers.append(self.settings.getSetting('trackers1'))
-        self.trackers.append(self.settings.getSetting('trackers2'))
-        self.trackers.append(self.settings.getSetting('trackers3'))
-        self.trackers.append(self.settings.getSetting('trackers4'))
-        self.trackers.append(self.settings.getSetting('trackers5'))
-        self.trackers.append(self.settings.getSetting('trackers6'))
-        self.trackers.append(self.settings.getSetting('trackers7'))
-        self.trackers.append(self.settings.getSetting('trackers8'))
-        self.trackers.append(self.settings.getSetting('trackers9'))
 
 
 class Browser:
@@ -74,6 +63,21 @@ class Browser:
             self.status = e.code
             result = False
         return result
+
+    def open2(self, url=''):
+        import httplib
+        word = url.split("://")
+        search = word[1]
+        pos = search.find("/")
+        conn = httplib.HTTPConnection(search[:pos])
+        conn.request("GET", search[pos:])
+        r1 = conn.getresponse()
+        self.status = str(r1.status) + " " + r1.reason
+        self.content = r1.read()
+        if r1.status == 200:
+            return True
+        else:
+            return False
 
     def login(self, url, payload, word):
         result = False
